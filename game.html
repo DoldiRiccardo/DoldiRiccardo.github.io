@@ -1,0 +1,46 @@
+<script src="http://rbellavita.bounceme.net/processing/processing.min.js"></script>
+<script type="application/processing" data-processing-target="pjs">
+float frame = 15;
+float x = 100;
+float y = 0;
+float acc = 9.81;
+float speedy = 10;
+float diamiter = 64;
+float deform = 0;
+float ene = 0.7;
+void setup(){
+  size(200,400);
+  frameRate(frame);
+}
+void draw(){
+  if(y == height-(diamiter-deform)/2){
+    speedy = -speedy*ene;
+  }
+  if(y >= height-(diamiter-deform)/2 && deform < diamiter/2){
+     y = height-(diamiter-deform)/2;
+     deform = deform + speedy;
+  }else if(deform > diamiter/2 || deform > 0){
+    y = height-(diamiter+deform)/2;
+    deform = deform - speedy;
+    speedy = -speedy*ene;
+  }else {
+    y = y + speedy;
+  }
+  speedy = speedy + acc/frame;
+  if(speedy < ene && y >= height-(diamiter-deform)/2){
+    y = 0;
+    deform = 0;
+    speedy = 10;
+    //delay(500);
+  }
+  noStroke();
+  background(255);
+  rect(0,width-1,0,height-1);
+  fill(255,0,0);
+  //println(speedy);
+  //println(y);
+  ellipse(x,y,diamiter+deform,diamiter-deform);
+}
+
+</script>
+<canvas id="pjs" border="1"> </canvas>
